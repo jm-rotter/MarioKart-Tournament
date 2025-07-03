@@ -30,7 +30,7 @@ export default function EnterTournament() {
     return publicUrl;
   }
 
-  async function registerTeam(name: string, logoUrl: string) {
+  async function registerTeam(name: string, logoUrl: string | null) {
     const { data, error } = await supabase
       .from("teams")
       .insert([{ name, logo_url: logoUrl }])
