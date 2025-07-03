@@ -34,7 +34,7 @@ export default function EnterTournament() {
 
       {submitted ? (
         <div className="bg-green-700 p-4 rounded text-white">
-		Thank you for registering your team! We&apos;'ll get in touch soon.
+		Thank you for registering your team!
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-5 text-gray-100">
