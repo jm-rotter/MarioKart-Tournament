@@ -25,6 +25,16 @@ export default function Home() {
             Enter Tournament
           </button>
         </Link>
+        <Link href="/join-team" passHref>
+          <button className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl shadow-md">
+            Join Team
+          </button>
+        </Link>
+        <Link href="/register-team" passHref>
+          <button className="px-6 py-3 bg-pink-600 hover:bg-pink-700 text-white rounded-xl shadow-md">
+            Register a New Team
+          </button>
+        </Link>
       </div>
 
       <p className="mt-16 text-sm text-gray-500">
