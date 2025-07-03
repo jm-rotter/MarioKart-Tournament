@@ -6,7 +6,6 @@ export default function EnterTournament() {
   const [constructorName, setConstructorName] = useState("");
   const [logoUrl, setLogoUrl] = useState("");
   const [drivers, setDrivers] = useState("");
-  const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -15,9 +14,7 @@ export default function EnterTournament() {
     // For now just log the data; later replace with API call to save the data
     console.log({
       constructorName,
-      logoUrl,
       drivers: drivers.split(",").map((d) => d.trim()).filter(Boolean),
-      email,
     });
 
     setSubmitted(true);
@@ -80,21 +77,6 @@ export default function EnterTournament() {
               required
               className="w-full rounded border border-gray-600 bg-gray-900 p-2"
               placeholder="Driver1, Driver2, Driver3"
-            />
-          </div>
-
-          <div>
-            <label className="block mb-1 font-semibold" htmlFor="email">
-              Contact Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full rounded border border-gray-600 bg-gray-900 p-2"
-              placeholder="you@example.com"
             />
           </div>
 
