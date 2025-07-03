@@ -19,7 +19,7 @@ export default function PlayersPage() {
       setError(null);
 
       const { data, error } = await supabase
-        .from<Player>("players")
+        .from<"players", Player>("players")
         .select("id, name")
         .order("name", { ascending: true });
 
