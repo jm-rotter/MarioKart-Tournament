@@ -14,6 +14,9 @@ export default function Navbar() {
         <Link href="/teams" className="hover:text-yellow-400">
           Teams
         </Link>
+        <Link href="/players" className="hover:text-yellow-400">
+          Players
+		</Link>
       </div>
     </nav>
   );

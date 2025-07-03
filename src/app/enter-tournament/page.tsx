@@ -1,28 +1,41 @@
 "use client";
 
 import React, { useState } from "react";
+import { supabase } from "../../../lib/supabaseClient"; // adjust path if needed
 
 export default function EnterTournament() {
-  const [constructorName, setConstructorName] = useState("");
-  const [logoUrl, setLogoUrl] = useState("");
-  const [drivers, setDrivers] = useState("");
+  const [playerName, setPlayerName] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  async function submitPlayer(name: string) {
+    const { data, error } = await supabase
+      .from("players")
+      .insert([{ name }])
+      .select()
+      .single();
+
+    if (error) {
+      throw error;
+    }
+    return data;
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMessage("");
+    setLoading(true);
 
-    // For now just log the data; later replace with API call to save the data
-    console.log({
-      constructorName,
-      drivers: drivers.split(",").map((d) => d.trim()).filter(Boolean),
-    });
-
-    setSubmitted(true);
-    // reset form if you want:
-    // setConstructorName("");
-    // setLogoUrl("");
-    // setDrivers("");
-    // setEmail("");
+    try {
+      await submitPlayer(playerName.trim());
+      setSubmitted(true);
+    } catch (error) {
+      console.error("Failed to submit:", error);
+      setErrorMessage("Failed to submit registration. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -31,64 +44,39 @@ export default function EnterTournament() {
 
       {submitted ? (
         <div className="bg-green-700 p-4 rounded text-white">
-		Thank you for registering your team!
+          Thank you for registering!
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-5 text-gray-100">
           <div>
-            <label className="block mb-1 font-semibold" htmlFor="constructorName">
-              Constructor Name
+            <label className="block mb-1 font-semibold" htmlFor="playerName">
+              Your Name
             </label>
             <input
               type="text"
-              id="constructorName"
-              value={constructorName}
-              onChange={(e) => setConstructorName(e.target.value)}
+              id="playerName"
+              value={playerName}
+              onChange={(e) => setPlayerName(e.target.value)}
               required
               className="w-full rounded border border-gray-600 bg-gray-900 p-2"
-              placeholder="Your racing team name"
+              placeholder="Enter your name"
+              disabled={loading}
             />
           </div>
 
-          <div>
-            <label className="block mb-1 font-semibold" htmlFor="logoUrl">
-              Racing Team Logo URL
-            </label>
-            <input
-              type="url"
-              id="logoUrl"
-              value={logoUrl}
-              onChange={(e) => setLogoUrl(e.target.value)}
-              required
-              className="w-full rounded border border-gray-600 bg-gray-900 p-2"
-              placeholder="https://example.com/logo.png"
-            />
-          </div>
-
-          <div>
-            <label className="block mb-1 font-semibold" htmlFor="drivers">
-              Driver Names (comma separated)
-            </label>
-            <input
-              type="text"
-              id="drivers"
-              value={drivers}
-              onChange={(e) => setDrivers(e.target.value)}
-              required
-              className="w-full rounded border border-gray-600 bg-gray-900 p-2"
-              placeholder="Driver1, Driver2, Driver3"
-            />
-          </div>
+          {errorMessage && (
+            <p className="text-red-500 font-semibold">{errorMessage}</p>
+          )}
 
           <button
             type="submit"
-            className="w-full bg-yellow-400 text-gray-900 font-bold py-3 rounded hover:bg-yellow-500 transition"
+            disabled={loading}
+            className="w-full bg-yellow-400 text-gray-900 font-bold py-3 rounded hover:bg-yellow-500 transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Submit Registration
+            {loading ? "Submitting..." : "Submit Registration"}
           </button>
         </form>
       )}
     </main>
   );
 }
-
